@@ -41,6 +41,7 @@ type NotificationRequest struct {
 	IsChromeWeb            bool              `json:"isChromeWeb,omitempty"`
 	IsSafari               bool              `json:"isSafari,omitempty"`
 	IsAnyWeb               bool              `json:"isAnyWeb,omitempty"`
+	ChannelForExternalUserIDs string            `json:"channel_for_external_user_ids"`
 	IncludedSegments       []string          `json:"included_segments,omitempty"`
 	ExcludedSegments       []string          `json:"excluded_segments,omitempty"`
 	IncludePlayerIDs       []string          `json:"include_player_ids,omitempty"`
