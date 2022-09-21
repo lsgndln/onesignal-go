@@ -12,7 +12,7 @@ import (
 )
 
 const (
-	defaultBaseURL = "https://onesignal.com/api/v1/"
+	defaultBaseURL = "https://onesignal.com/api/v1"
 )
 
 // AuthKeyType specifies the token used to authentify the requests
