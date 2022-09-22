@@ -128,6 +128,15 @@ type PlayerCSVExportResponse struct {
 	CSVFileURL string `json:"csv_file_url"`
 }
 
+type PlayerUpdateTagsRequest struct {
+	Tags map[string]string `json:"tags"`
+}
+
+type PlayerUpdateTagsResponse struct {
+	Success bool     `json:"success"`
+	Errors  []string `json:"errors,omitempty"`
+}
+
 // List the players.
 //
 // OneSignal API docs: https://documentation.onesignal.com/docs/players-view-devices
@@ -344,4 +353,32 @@ func (s *PlayersService) Update(playerID string, player *PlayerRequest) (*Succes
 	}
 
 	return plResp, resp, err
+}
+
+// Update tags with external user id.
+//
+// OneSignal API docs: https://documentation.onesignal.com/reference/edit-tags-with-external-user-id
+func (s *PlayersService) UpdateTags(appID string, playerID string, tags map[string]string) (*SuccessResponse, *http.Response, error) {
+	// build the URL
+	path := fmt.Sprintf("/apps/%s/users/%s", appID, playerID)
+	u, err := url.Parse(path)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	updateRequest := PlayerUpdateTagsRequest{Tags: tags}
+
+	// create the request
+	req, err := s.client.NewRequest("PUT", u.String(), updateRequest, APP)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	updateRes := &SuccessResponse{}
+	resp, err := s.client.Do(req, updateRes)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return updateRes, resp, err
 }
