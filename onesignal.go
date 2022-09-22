@@ -154,7 +154,7 @@ func (c *Client) Do(r *http.Request, v interface{}) (*http.Response, error) {
 // response body will be silently ignored.
 func CheckResponse(r *http.Response) error {
 	switch r.StatusCode {
-	case http.StatusOK:
+	case http.StatusOK, http.StatusAccepted:
 		return nil
 	case http.StatusInternalServerError:
 		return &ErrorResponse{
