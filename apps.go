@@ -1,6 +1,7 @@
 package onesignal
 
 import (
+	"context"
 	"net/http"
 	"net/url"
 	"time"
@@ -67,7 +68,7 @@ type AppRequest struct {
 // List the apps.
 //
 // OneSignal API docs: https://documentation.onesignal.com/docs/apps-view-apps
-func (s *AppsService) List() ([]App, *http.Response, error) {
+func (s *AppsService) List(ctx context.Context) ([]App, *http.Response, error) {
 	// build the URL
 	u, err := url.Parse("/apps")
 	if err != nil {
@@ -75,7 +76,7 @@ func (s *AppsService) List() ([]App, *http.Response, error) {
 	}
 
 	// create the request
-	req, err := s.client.NewRequest("GET", u.String(), nil, USER)
+	req, err := s.client.NewRequest(ctx, "GET", u.String(), nil, USER)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -92,7 +93,7 @@ func (s *AppsService) List() ([]App, *http.Response, error) {
 // Get a single app.
 //
 // OneSignal API docs: https://documentation.onesignal.com/docs/appsid
-func (s *AppsService) Get(appID string) (*App, *http.Response, error) {
+func (s *AppsService) Get(ctx context.Context, appID string) (*App, *http.Response, error) {
 	// build the URL
 	u, err := url.Parse("/apps/" + appID)
 	if err != nil {
@@ -100,7 +101,7 @@ func (s *AppsService) Get(appID string) (*App, *http.Response, error) {
 	}
 
 	// create the request
-	req, err := s.client.NewRequest("GET", u.String(), nil, USER)
+	req, err := s.client.NewRequest(ctx, "GET", u.String(), nil, USER)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -117,7 +118,7 @@ func (s *AppsService) Get(appID string) (*App, *http.Response, error) {
 // Create an app.
 //
 // OneSignal API docs: https://documentation.onesignal.com/docs/apps-create-an-app
-func (s *AppsService) Create(opt *AppRequest) (*App, *http.Response, error) {
+func (s *AppsService) Create(ctx context.Context, opt *AppRequest) (*App, *http.Response, error) {
 	// build the URL
 	u, err := url.Parse("/apps")
 	if err != nil {
@@ -125,7 +126,7 @@ func (s *AppsService) Create(opt *AppRequest) (*App, *http.Response, error) {
 	}
 
 	// create the request
-	req, err := s.client.NewRequest("POST", u.String(), opt, USER)
+	req, err := s.client.NewRequest(ctx, "POST", u.String(), opt, USER)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -142,7 +143,7 @@ func (s *AppsService) Create(opt *AppRequest) (*App, *http.Response, error) {
 // Update an app.
 //
 // OneSignal API docs: https://documentation.onesignal.com/docs/appsid-update-an-app
-func (s *AppsService) Update(appID string, opt *AppRequest) (*App, *http.Response, error) {
+func (s *AppsService) Update(ctx context.Context, appID string, opt *AppRequest) (*App, *http.Response, error) {
 	// build the URL
 	u, err := url.Parse("/apps/" + appID)
 	if err != nil {
@@ -150,7 +151,7 @@ func (s *AppsService) Update(appID string, opt *AppRequest) (*App, *http.Respons
 	}
 
 	// create the request
-	req, err := s.client.NewRequest("PUT", u.String(), opt, USER)
+	req, err := s.client.NewRequest(ctx, "PUT", u.String(), opt, USER)
 	if err != nil {
 		return nil, nil, err
 	}

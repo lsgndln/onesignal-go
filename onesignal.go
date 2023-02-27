@@ -3,7 +3,9 @@ package onesignal
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
+	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -78,7 +80,7 @@ func NewClient(httpClient *http.Client) *Client {
 // value pointed to by body is JSON encoded and included as the request body.
 // The AuthKeyType will determine which authorization token (APP or USER) is
 // used for the request.
-func (c *Client) NewRequest(method, path string, body interface{}, authKeyType AuthKeyType) (*http.Request, error) {
+func (c *Client) NewRequest(ctx context.Context, method, path string, body interface{}, authKeyType AuthKeyType) (*http.Request, error) {
 	// build the URL
 	u, err := url.Parse(c.BaseURL.String() + path)
 	if err != nil {
@@ -98,7 +100,7 @@ func (c *Client) NewRequest(method, path string, body interface{}, authKeyType A
 	}
 
 	// create the request
-	req, err := http.NewRequest(method, u.String(), buf)
+	req, err := http.NewRequestWithContext(ctx, method, u.String(), buf)
 	if err != nil {
 		return nil, err
 	}

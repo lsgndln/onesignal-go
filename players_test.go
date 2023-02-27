@@ -1,6 +1,7 @@
 package onesignal
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -128,7 +129,7 @@ func TestPlayersService_List(t *testing.T) {
 		fmt.Fprint(w, testhelper.LoadFixture(t, "player-list-response.json"))
 	})
 
-	listRes, _, err := client.Players.List(opt)
+	listRes, _, err := client.Players.List(context.Background(), opt)
 	if err != nil {
 		t.Errorf("List returned an error: %v", err)
 	}
@@ -170,7 +171,7 @@ func TestPlayersService_List_returnsError(t *testing.T) {
 			}`)
 	})
 
-	_, resp, err := client.Players.List(opt)
+	_, resp, err := client.Players.List(context.Background(), opt)
 	errResp, ok := err.(*ErrorResponse)
 	if !ok {
 		t.Errorf("Error should be of type ErrorResponse but is %v: %+v", reflect.TypeOf(err), err)
@@ -201,7 +202,7 @@ func TestPlayersService_Get(t *testing.T) {
 		fmt.Fprint(w, testhelper.LoadFixture(t, "player-get-response.json"))
 	})
 
-	player, _, err := client.Players.Get("id123")
+	player, _, err := client.Players.Get(context.Background(), "id123")
 	want := samplePlayer
 
 	if err != nil {
@@ -239,7 +240,7 @@ func TestPlayersService_Create(t *testing.T) {
 		}`)
 	})
 
-	createRes, _, _ := client.Players.Create(playerRequest)
+	createRes, _, _ := client.Players.Create(context.Background(), playerRequest)
 	want := &PlayerCreateResponse{
 		Success: true,
 		ID:      "ffffb794-ba37-11e3-8077-031d62f86ebf",
@@ -274,7 +275,7 @@ func TestPlayersService_OnSession(t *testing.T) {
 		}`)
 	})
 
-	onSessionRes, _, err := client.Players.OnSession("id123", opt)
+	onSessionRes, _, err := client.Players.OnSession(context.Background(), "id123", opt)
 	want := &SuccessResponse{
 		Success: true,
 	}
@@ -313,7 +314,7 @@ func TestPlayersService_OnPurchase(t *testing.T) {
 		}`)
 	})
 
-	onPurchaseRes, _, err := client.Players.OnPurchase("id123", opt)
+	onPurchaseRes, _, err := client.Players.OnPurchase(context.Background(), "id123", opt)
 	want := &SuccessResponse{
 		Success: true,
 	}
@@ -352,7 +353,7 @@ func TestPlayersService_OnFocus(t *testing.T) {
 		}`)
 	})
 
-	onFocusRes, _, err := client.Players.OnFocus("id123", opt)
+	onFocusRes, _, err := client.Players.OnFocus(context.Background(), "id123", opt)
 	want := &SuccessResponse{
 		Success: true,
 	}
@@ -403,7 +404,7 @@ func TestPlayersService_CSVExport(t *testing.T) {
 		}`)
 	})
 
-	CSVExportRes, _, err := client.Players.CSVExport(opt)
+	CSVExportRes, _, err := client.Players.CSVExport(context.Background(), opt)
 	want := &PlayerCSVExportResponse{
 		CSVFileURL: "https://example.com/foo.csv",
 	}
@@ -442,7 +443,7 @@ func TestPlayersService_Update(t *testing.T) {
 		}`)
 	})
 
-	updateRes, _, _ := client.Players.Update("fake-id", playerRequest)
+	updateRes, _, _ := client.Players.Update(context.Background(), "fake-id", playerRequest)
 	want := &SuccessResponse{
 		Success: true,
 	}

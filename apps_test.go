@@ -1,6 +1,7 @@
 package onesignal
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"reflect"
@@ -98,7 +99,7 @@ func TestAppsService_List(t *testing.T) {
 		fmt.Fprint(w, testhelper.LoadFixture(t, "app-list-response.json"))
 	})
 
-	apps, _, err := client.Apps.List()
+	apps, _, err := client.Apps.List(context.Background())
 	if err != nil {
 		t.Errorf("List returned an error: %v", err)
 	}
@@ -129,7 +130,7 @@ func TestAppsService_Get(t *testing.T) {
 		fmt.Fprint(w, testhelper.LoadFixture(t, "app-get-response.json"))
 	})
 
-	app, _, err := client.Apps.Get(appID)
+	app, _, err := client.Apps.Get(context.Background(), appID)
 	if err != nil {
 		t.Errorf("Get returned an error: %v", err)
 	}
@@ -162,7 +163,7 @@ func TestAppsService_Create(t *testing.T) {
 		fmt.Fprint(w, testhelper.LoadFixture(t, "app-get-response.json"))
 	})
 
-	createRes, _, err := client.Apps.Create(appRequest)
+	createRes, _, err := client.Apps.Create(context.Background(), appRequest)
 	if err != nil {
 		t.Errorf("Create returned an error: %v", err)
 	}
@@ -196,7 +197,7 @@ func TestAppsService_Update(t *testing.T) {
 		fmt.Fprint(w, testhelper.LoadFixture(t, "app-get-response.json"))
 	})
 
-	updateRes, _, err := client.Apps.Update(appID, appRequest)
+	updateRes, _, err := client.Apps.Update(context.Background(), appID, appRequest)
 	if err != nil {
 		t.Errorf("Update returned an error: %v", err)
 	}
