@@ -1,6 +1,7 @@
 package onesignal
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -97,7 +98,7 @@ func TestNotificationsService_List(t *testing.T) {
 		fmt.Fprint(w, testhelper.LoadFixture(t, "notification-list-response.json"))
 	})
 
-	listRes, _, err := client.Notifications.List(opt)
+	listRes, _, err := client.Notifications.List(context.Background(), opt)
 	if err != nil {
 		t.Errorf("List returned an error: %v", err)
 	}
@@ -152,7 +153,7 @@ func TestNotificationsService_Get(t *testing.T) {
 		fmt.Fprint(w, testhelper.LoadFixture(t, "notification-get-response.json"))
 	})
 
-	getRes, _, err := client.Notifications.Get(notification.ID, opt)
+	getRes, _, err := client.Notifications.Get(context.Background(), notification.ID, opt)
 	if err != nil {
 		t.Errorf("Get returned an error: %v", err)
 	}
@@ -192,7 +193,7 @@ func TestNotificationsService_Create(t *testing.T) {
 		ID:         "notif-fake-id",
 		Recipients: 1,
 	}
-	createRes, _, err := client.Notifications.Create(notificationRequest)
+	createRes, _, err := client.Notifications.Create(context.Background(), notificationRequest)
 	if err != nil {
 		t.Errorf("Create returned an error: %v", err)
 	}
@@ -222,7 +223,7 @@ func TestNotificationsService_Create_returnsError(t *testing.T) {
 			}`)
 	})
 
-	_, resp, err := client.Notifications.Create(notificationRequest)
+	_, resp, err := client.Notifications.Create(context.Background(), notificationRequest)
 	errResp, ok := err.(*ErrorResponse)
 	if !ok {
 		t.Errorf("Error should be of type ErrorResponse but is %v: %+v", reflect.TypeOf(err), err)
@@ -256,7 +257,7 @@ func TestNotificationsService_Create_invalidPlayerIds(t *testing.T) {
 		}`)
 	})
 
-	createResp, _, err := client.Notifications.Create(notificationRequest)
+	createResp, _, err := client.Notifications.Create(context.Background(), notificationRequest)
 	if err != nil {
 		t.Errorf("Create returned an error: %v", err)
 	}
@@ -293,7 +294,7 @@ func TestNotificationsService_Create_noSubscribedPlayers(t *testing.T) {
 		}`)
 	})
 
-	createResp, _, err := client.Notifications.Create(notificationRequest)
+	createResp, _, err := client.Notifications.Create(context.Background(), notificationRequest)
 	if err != nil {
 		t.Errorf("Create returned an error: %v", err)
 	}
@@ -339,7 +340,7 @@ func TestNotificationsService_Update(t *testing.T) {
 	want := &SuccessResponse{
 		Success: true,
 	}
-	updateRes, _, err := client.Notifications.Update(notifID, opt)
+	updateRes, _, err := client.Notifications.Update(context.Background(), notifID, opt)
 	if err != nil {
 		t.Errorf("Update returned an error: %v", err)
 	}
@@ -380,7 +381,7 @@ func TestNotificationsService_Delete(t *testing.T) {
 	want := &SuccessResponse{
 		Success: true,
 	}
-	deleteRes, _, err := client.Notifications.Delete(notifID, opt)
+	deleteRes, _, err := client.Notifications.Delete(context.Background(), notifID, opt)
 	if err != nil {
 		t.Errorf("Delete returned an error: %v", err)
 	}

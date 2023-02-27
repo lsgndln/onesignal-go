@@ -1,6 +1,7 @@
 package onesignal
 
 import (
+	"context"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -30,66 +31,66 @@ type Notification struct {
 
 // NotificationRequest represents a request to create a notification.
 type NotificationRequest struct {
-	AppID                  string            `json:"app_id"`
-	Contents               map[string]string `json:"contents,omitempty"`
-	Headings               map[string]string `json:"headings,omitempty"`
-	IsIOS                  bool              `json:"isIos,omitempty"`
-	IsAndroid              bool              `json:"isAndroid,omitempty"`
-	IsWP                   bool              `json:"isWP,omitempty"`
-	IsADM                  bool              `json:"isAdm,omitempty"`
-	IsChrome               bool              `json:"isChrome,omitempty"`
-	IsChromeWeb            bool              `json:"isChromeWeb,omitempty"`
-	IsSafari               bool              `json:"isSafari,omitempty"`
-	IsAnyWeb               bool              `json:"isAnyWeb,omitempty"`
+	AppID                     string            `json:"app_id"`
+	Contents                  map[string]string `json:"contents,omitempty"`
+	Headings                  map[string]string `json:"headings,omitempty"`
+	IsIOS                     bool              `json:"isIos,omitempty"`
+	IsAndroid                 bool              `json:"isAndroid,omitempty"`
+	IsWP                      bool              `json:"isWP,omitempty"`
+	IsADM                     bool              `json:"isAdm,omitempty"`
+	IsChrome                  bool              `json:"isChrome,omitempty"`
+	IsChromeWeb               bool              `json:"isChromeWeb,omitempty"`
+	IsSafari                  bool              `json:"isSafari,omitempty"`
+	IsAnyWeb                  bool              `json:"isAnyWeb,omitempty"`
 	ChannelForExternalUserIDs string            `json:"channel_for_external_user_ids"`
-	IncludedSegments       []string          `json:"included_segments,omitempty"`
-	ExcludedSegments       []string          `json:"excluded_segments,omitempty"`
-	IncludePlayerIDs       []string          `json:"include_player_ids,omitempty"`
-	IncludeExternalUserIDs []string          `json:"include_external_user_ids,omitempty"`
-	IncludeIOSTokens       []string          `json:"include_ios_tokens,omitempty"`
-	IncludeAndroidRegIDs   []string          `json:"include_android_reg_ids,omitempty"`
-	IncludeWPURIs          []string          `json:"include_wp_uris,omitempty"`
-	IncludeWPWNSURIs       []string          `json:"include_wp_wns_uris,omitempty"`
-	IncludeAmazonRegIDs    []string          `json:"include_amazon_reg_ids,omitempty"`
-	IncludeChromeRegIDs    []string          `json:"include_chrome_reg_ids,omitempty"`
-	IncludeChromeWebRegIDs []string          `json:"include_chrome_web_reg_ids,omitempty"`
-	AppIDs                 []string          `json:"app_ids,omitempty"`
-	Tags                   interface{}       `json:"tags,omitempty"`
-	IOSBadgeType           string            `json:"ios_badgeType,omitempty"`
-	IOSBadgeCount          int               `json:"ios_badgeCount,omitempty"`
-	IOSSound               string            `json:"ios_sound,omitempty"`
-	AndroidSound           string            `json:"android_sound,omitempty"`
-	ADMSound               string            `json:"adm_sound,omitempty"`
-	WPSound                string            `json:"wp_sound,omitempty"`
-	WPWNSSound             string            `json:"wp_wns_sound,omitempty"`
-	Data                   interface{}       `json:"data,omitempty"`
-	Buttons                interface{}       `json:"buttons,omitempty"`
-	SmallIcon              string            `json:"small_icon,omitempty"`
-	LargeIcon              string            `json:"large_icon,omitempty"`
-	BigPicture             string            `json:"big_picture,omitempty"`
-	ADMSmallIcon           string            `json:"adm_small_icon,omitempty"`
-	ADMLargeIcon           string            `json:"adm_large_icon,omitempty"`
-	ADMBigPicture          string            `json:"adm_big_picture,omitempty"`
-	ChromeIcon             string            `json:"chrome_icon,omitempty"`
-	ChromeBigPicture       string            `json:"chrome_big_picture,omitempty"`
-	ChromeWebIcon          string            `json:"chrome_web_icon,omitempty"`
-	FirefoxIcon            string            `json:"firefox_icon,omitempty"`
-	URL                    string            `json:"url,omitempty"`
-	SendAfter              string            `json:"send_after,omitempty"`
-	DelayedOption          string            `json:"delayed_option,omitempty"`
-	DeliveryTimeOfDay      string            `json:"delivery_time_of_day,omitempty"`
-	AndroidLEDColor        string            `json:"android_led_color,omitempty"`
-	AndroidAccentColor     string            `json:"android_accent_color,omitempty"`
-	AndroidVisibility      int               `json:"android_visibility,omitempty"`
-	ContentAvailable       bool              `json:"content_available,omitempty"`
-	AndroidBackgroundData  bool              `json:"android_background_data,omitempty"`
-	AmazonBackgroundData   bool              `json:"amazon_background_data,omitempty"`
-	TemplateID             string            `json:"template_id,omitempty"`
-	AndroidGroup           string            `json:"android_group,omitempty"`
-	AndroidGroupMessage    interface{}       `json:"android_group_message,omitempty"`
-	ADMGroup               string            `json:"adm_group,omitempty"`
-	ADMGroupMessage        interface{}       `json:"adm_group_message,omitempty"`
-	Filters                interface{}       `json:"filters,omitempty"`
+	IncludedSegments          []string          `json:"included_segments,omitempty"`
+	ExcludedSegments          []string          `json:"excluded_segments,omitempty"`
+	IncludePlayerIDs          []string          `json:"include_player_ids,omitempty"`
+	IncludeExternalUserIDs    []string          `json:"include_external_user_ids,omitempty"`
+	IncludeIOSTokens          []string          `json:"include_ios_tokens,omitempty"`
+	IncludeAndroidRegIDs      []string          `json:"include_android_reg_ids,omitempty"`
+	IncludeWPURIs             []string          `json:"include_wp_uris,omitempty"`
+	IncludeWPWNSURIs          []string          `json:"include_wp_wns_uris,omitempty"`
+	IncludeAmazonRegIDs       []string          `json:"include_amazon_reg_ids,omitempty"`
+	IncludeChromeRegIDs       []string          `json:"include_chrome_reg_ids,omitempty"`
+	IncludeChromeWebRegIDs    []string          `json:"include_chrome_web_reg_ids,omitempty"`
+	AppIDs                    []string          `json:"app_ids,omitempty"`
+	Tags                      interface{}       `json:"tags,omitempty"`
+	IOSBadgeType              string            `json:"ios_badgeType,omitempty"`
+	IOSBadgeCount             int               `json:"ios_badgeCount,omitempty"`
+	IOSSound                  string            `json:"ios_sound,omitempty"`
+	AndroidSound              string            `json:"android_sound,omitempty"`
+	ADMSound                  string            `json:"adm_sound,omitempty"`
+	WPSound                   string            `json:"wp_sound,omitempty"`
+	WPWNSSound                string            `json:"wp_wns_sound,omitempty"`
+	Data                      interface{}       `json:"data,omitempty"`
+	Buttons                   interface{}       `json:"buttons,omitempty"`
+	SmallIcon                 string            `json:"small_icon,omitempty"`
+	LargeIcon                 string            `json:"large_icon,omitempty"`
+	BigPicture                string            `json:"big_picture,omitempty"`
+	ADMSmallIcon              string            `json:"adm_small_icon,omitempty"`
+	ADMLargeIcon              string            `json:"adm_large_icon,omitempty"`
+	ADMBigPicture             string            `json:"adm_big_picture,omitempty"`
+	ChromeIcon                string            `json:"chrome_icon,omitempty"`
+	ChromeBigPicture          string            `json:"chrome_big_picture,omitempty"`
+	ChromeWebIcon             string            `json:"chrome_web_icon,omitempty"`
+	FirefoxIcon               string            `json:"firefox_icon,omitempty"`
+	URL                       string            `json:"url,omitempty"`
+	SendAfter                 string            `json:"send_after,omitempty"`
+	DelayedOption             string            `json:"delayed_option,omitempty"`
+	DeliveryTimeOfDay         string            `json:"delivery_time_of_day,omitempty"`
+	AndroidLEDColor           string            `json:"android_led_color,omitempty"`
+	AndroidAccentColor        string            `json:"android_accent_color,omitempty"`
+	AndroidVisibility         int               `json:"android_visibility,omitempty"`
+	ContentAvailable          bool              `json:"content_available,omitempty"`
+	AndroidBackgroundData     bool              `json:"android_background_data,omitempty"`
+	AmazonBackgroundData      bool              `json:"amazon_background_data,omitempty"`
+	TemplateID                string            `json:"template_id,omitempty"`
+	AndroidGroup              string            `json:"android_group,omitempty"`
+	AndroidGroupMessage       interface{}       `json:"android_group_message,omitempty"`
+	ADMGroup                  string            `json:"adm_group,omitempty"`
+	ADMGroupMessage           interface{}       `json:"adm_group_message,omitempty"`
+	Filters                   interface{}       `json:"filters,omitempty"`
 }
 
 // NotificationCreateResponse wraps the standard http.Response for the
@@ -140,7 +141,7 @@ type NotificationDeleteOptions struct {
 //
 // OneSignal API docs:
 // https://documentation.onesignal.com/docs/notifications-view-notifications
-func (s *NotificationsService) List(opt *NotificationListOptions) (*NotificationListResponse, *http.Response, error) {
+func (s *NotificationsService) List(ctx context.Context, opt *NotificationListOptions) (*NotificationListResponse, *http.Response, error) {
 	// build the URL with the query string
 	u, err := url.Parse("/notifications")
 	if err != nil {
@@ -153,7 +154,7 @@ func (s *NotificationsService) List(opt *NotificationListOptions) (*Notification
 	u.RawQuery = q.Encode()
 
 	// create the request
-	req, err := s.client.NewRequest("GET", u.String(), nil, APP)
+	req, err := s.client.NewRequest(ctx, "GET", u.String(), nil, APP)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -171,7 +172,7 @@ func (s *NotificationsService) List(opt *NotificationListOptions) (*Notification
 //
 // OneSignal API docs:
 // https://documentation.onesignal.com/docs/notificationsid-view-notification
-func (s *NotificationsService) Get(notificationID string, opt *NotificationGetOptions) (*Notification, *http.Response, error) {
+func (s *NotificationsService) Get(ctx context.Context, notificationID string, opt *NotificationGetOptions) (*Notification, *http.Response, error) {
 	// build the URL with the query string
 	u, err := url.Parse("/notifications/" + notificationID)
 	if err != nil {
@@ -182,7 +183,7 @@ func (s *NotificationsService) Get(notificationID string, opt *NotificationGetOp
 	u.RawQuery = q.Encode()
 
 	// create the request
-	req, err := s.client.NewRequest("GET", u.String(), nil, APP)
+	req, err := s.client.NewRequest(ctx, "GET", u.String(), nil, APP)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -200,7 +201,7 @@ func (s *NotificationsService) Get(notificationID string, opt *NotificationGetOp
 //
 // OneSignal API docs:
 // https://documentation.onesignal.com/docs/notifications-create-notification
-func (s *NotificationsService) Create(opt *NotificationRequest) (*NotificationCreateResponse, *http.Response, error) {
+func (s *NotificationsService) Create(ctx context.Context, opt *NotificationRequest) (*NotificationCreateResponse, *http.Response, error) {
 	// build the URL
 	u, err := url.Parse("/notifications")
 	if err != nil {
@@ -208,7 +209,7 @@ func (s *NotificationsService) Create(opt *NotificationRequest) (*NotificationCr
 	}
 
 	// create the request
-	req, err := s.client.NewRequest("POST", u.String(), opt, APP)
+	req, err := s.client.NewRequest(ctx, "POST", u.String(), opt, APP)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -226,7 +227,7 @@ func (s *NotificationsService) Create(opt *NotificationRequest) (*NotificationCr
 //
 // OneSignal API docs:
 // https://documentation.onesignal.com/docs/notificationsid-track-open
-func (s *NotificationsService) Update(notificationID string, opt *NotificationUpdateOptions) (*SuccessResponse, *http.Response, error) {
+func (s *NotificationsService) Update(ctx context.Context, notificationID string, opt *NotificationUpdateOptions) (*SuccessResponse, *http.Response, error) {
 	// build the URL
 	u, err := url.Parse("/notifications/" + notificationID)
 	if err != nil {
@@ -234,7 +235,7 @@ func (s *NotificationsService) Update(notificationID string, opt *NotificationUp
 	}
 
 	// create the request
-	req, err := s.client.NewRequest("PUT", u.String(), opt, APP)
+	req, err := s.client.NewRequest(ctx, "PUT", u.String(), opt, APP)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -252,7 +253,7 @@ func (s *NotificationsService) Update(notificationID string, opt *NotificationUp
 //
 // OneSignal API docs:
 // https://documentation.onesignal.com/docs/notificationsid-cancel-notification
-func (s *NotificationsService) Delete(notificationID string, opt *NotificationDeleteOptions) (*SuccessResponse, *http.Response, error) {
+func (s *NotificationsService) Delete(ctx context.Context, notificationID string, opt *NotificationDeleteOptions) (*SuccessResponse, *http.Response, error) {
 	// build the URL
 	u, err := url.Parse("/notifications/" + notificationID)
 	if err != nil {
@@ -260,7 +261,7 @@ func (s *NotificationsService) Delete(notificationID string, opt *NotificationDe
 	}
 
 	// create the request
-	req, err := s.client.NewRequest("DELETE", u.String(), opt, APP)
+	req, err := s.client.NewRequest(ctx, "DELETE", u.String(), opt, APP)
 	if err != nil {
 		return nil, nil, err
 	}

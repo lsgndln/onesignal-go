@@ -1,6 +1,7 @@
 package onesignal
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -100,7 +101,7 @@ func TestNewRequest(t *testing.T) {
 	inBody := struct{ Foo string }{Foo: "Bar"}
 	authKeyType := APP
 	outBody := `{"Foo":"Bar"}` + "\n"
-	req, _ := c.NewRequest(method, inURL, inBody, authKeyType)
+	req, _ := c.NewRequest(context.Background(), method, inURL, inBody, authKeyType)
 
 	// test the HTTP method
 	if got, want := req.Method, method; got != want {
@@ -130,7 +131,7 @@ func TestNewRequest_userKeyType(t *testing.T) {
 	c.AppKey = appKey
 	c.UserKey = userKey
 
-	req, _ := c.NewRequest("GET", "foo", nil, USER)
+	req, _ := c.NewRequest(context.Background(), "GET", "foo", nil, USER)
 
 	testHeader(t, req, "Authorization", "Basic "+userKey)
 }
@@ -141,7 +142,7 @@ func TestNewRequest_invalidJSON(t *testing.T) {
 	type T struct {
 		A map[int]interface{}
 	}
-	_, err := c.NewRequest("GET", "/", &T{}, APP)
+	_, err := c.NewRequest(context.Background(), "GET", "/", &T{}, APP)
 
 	if err == nil {
 		t.Error("Expected error to be returned.")
@@ -154,7 +155,7 @@ func TestNewRequest_invalidJSON(t *testing.T) {
 func TestNewRequest_emptyBody(t *testing.T) {
 	c := NewClient(nil)
 
-	req, err := c.NewRequest("GET", "/", nil, APP)
+	req, err := c.NewRequest(context.Background(), "GET", "/", nil, APP)
 
 	if err != nil {
 		t.Fatalf("NewRequest returned unexpected error: %v", err)
@@ -177,7 +178,7 @@ func TestDo(t *testing.T) {
 		fmt.Fprint(w, `{"A":"a"}`)
 	})
 
-	req, _ := client.NewRequest("GET", "/", nil, APP)
+	req, _ := client.NewRequest(context.Background(), "GET", "/", nil, APP)
 	body := new(foo)
 	client.Do(req, body)
 
@@ -195,7 +196,7 @@ func TestDo_httpError(t *testing.T) {
 		http.Error(w, "Bad Request", 400)
 	})
 
-	req, _ := client.NewRequest("GET", "/", nil, APP)
+	req, _ := client.NewRequest(context.Background(), "GET", "/", nil, APP)
 	_, err := client.Do(req, nil)
 
 	_, ok := err.(*ErrorResponse)

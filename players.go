@@ -1,6 +1,7 @@
 package onesignal
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -140,7 +141,7 @@ type PlayerUpdateTagsResponse struct {
 // List the players.
 //
 // OneSignal API docs: https://documentation.onesignal.com/docs/players-view-devices
-func (s *PlayersService) List(opt *PlayerListOptions) (*PlayerListResponse, *http.Response, error) {
+func (s *PlayersService) List(ctx context.Context, opt *PlayerListOptions) (*PlayerListResponse, *http.Response, error) {
 	// build the URL with the query string
 	u, err := url.Parse("/players")
 	if err != nil {
@@ -153,7 +154,7 @@ func (s *PlayersService) List(opt *PlayerListOptions) (*PlayerListResponse, *htt
 	u.RawQuery = q.Encode()
 
 	// create the request
-	req, err := s.client.NewRequest("GET", u.String(), nil, APP)
+	req, err := s.client.NewRequest(ctx, "GET", u.String(), nil, APP)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -170,7 +171,7 @@ func (s *PlayersService) List(opt *PlayerListOptions) (*PlayerListResponse, *htt
 // Get a single player.
 //
 // OneSignal API docs: https://documentation.onesignal.com/docs/playersid
-func (s *PlayersService) Get(playerID string) (*Player, *http.Response, error) {
+func (s *PlayersService) Get(ctx context.Context, playerID string) (*Player, *http.Response, error) {
 	// build the URL
 	path := fmt.Sprintf("/players/%s", playerID)
 	u, err := url.Parse(path)
@@ -179,7 +180,7 @@ func (s *PlayersService) Get(playerID string) (*Player, *http.Response, error) {
 	}
 
 	// create the request
-	req, err := s.client.NewRequest("GET", u.String(), nil, APP)
+	req, err := s.client.NewRequest(ctx, "GET", u.String(), nil, APP)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -198,7 +199,7 @@ func (s *PlayersService) Get(playerID string) (*Player, *http.Response, error) {
 //
 // OneSignal API docs:
 // https://documentation.onesignal.com/docs/players-add-a-device
-func (s *PlayersService) Create(player *PlayerRequest) (*PlayerCreateResponse, *http.Response, error) {
+func (s *PlayersService) Create(ctx context.Context, player *PlayerRequest) (*PlayerCreateResponse, *http.Response, error) {
 	// build the URL
 	u, err := url.Parse("/players")
 	if err != nil {
@@ -206,7 +207,7 @@ func (s *PlayersService) Create(player *PlayerRequest) (*PlayerCreateResponse, *
 	}
 
 	// create the request
-	req, err := s.client.NewRequest("POST", u.String(), player, APP)
+	req, err := s.client.NewRequest(ctx, "POST", u.String(), player, APP)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -224,7 +225,7 @@ func (s *PlayersService) Create(player *PlayerRequest) (*PlayerCreateResponse, *
 //
 // OneSignal API docs:
 // https://documentation.onesignal.com/docs/playersidon_session
-func (s *PlayersService) OnSession(playerID string, opt *PlayerOnSessionOptions) (*SuccessResponse, *http.Response, error) {
+func (s *PlayersService) OnSession(ctx context.Context, playerID string, opt *PlayerOnSessionOptions) (*SuccessResponse, *http.Response, error) {
 	// build the URL
 	path := fmt.Sprintf("/players/%s/on_session", playerID)
 	u, err := url.Parse(path)
@@ -233,7 +234,7 @@ func (s *PlayersService) OnSession(playerID string, opt *PlayerOnSessionOptions)
 	}
 
 	// create the request
-	req, err := s.client.NewRequest("POST", u.String(), opt, APP)
+	req, err := s.client.NewRequest(ctx, "POST", u.String(), opt, APP)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -250,7 +251,7 @@ func (s *PlayersService) OnSession(playerID string, opt *PlayerOnSessionOptions)
 // Create a new purchase for a player.
 //
 // OneSignal API docs: https://documentation.onesignal.com/docs/on_purchase
-func (s *PlayersService) OnPurchase(playerID string, opt *PlayerOnPurchaseOptions) (*SuccessResponse, *http.Response, error) {
+func (s *PlayersService) OnPurchase(ctx context.Context, playerID string, opt *PlayerOnPurchaseOptions) (*SuccessResponse, *http.Response, error) {
 	// build the URL
 	path := fmt.Sprintf("/players/%s/on_purchase", playerID)
 	u, err := url.Parse(path)
@@ -259,7 +260,7 @@ func (s *PlayersService) OnPurchase(playerID string, opt *PlayerOnPurchaseOption
 	}
 
 	// create the request
-	req, err := s.client.NewRequest("POST", u.String(), opt, APP)
+	req, err := s.client.NewRequest(ctx, "POST", u.String(), opt, APP)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -277,7 +278,7 @@ func (s *PlayersService) OnPurchase(playerID string, opt *PlayerOnPurchaseOption
 //
 // OneSignal API docs:
 // https://documentation.onesignal.com/docs/playersidon_focus
-func (s *PlayersService) OnFocus(playerID string, opt *PlayerOnFocusOptions) (*SuccessResponse, *http.Response, error) {
+func (s *PlayersService) OnFocus(ctx context.Context, playerID string, opt *PlayerOnFocusOptions) (*SuccessResponse, *http.Response, error) {
 	// build the URL
 	path := fmt.Sprintf("/players/%s/on_focus", playerID)
 	u, err := url.Parse(path)
@@ -286,7 +287,7 @@ func (s *PlayersService) OnFocus(playerID string, opt *PlayerOnFocusOptions) (*S
 	}
 
 	// create the request
-	req, err := s.client.NewRequest("POST", u.String(), opt, APP)
+	req, err := s.client.NewRequest(ctx, "POST", u.String(), opt, APP)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -304,7 +305,7 @@ func (s *PlayersService) OnFocus(playerID string, opt *PlayerOnFocusOptions) (*S
 //
 // OneSignal API docs:
 // https://documentation.onesignal.com/docs/players_csv_export
-func (s *PlayersService) CSVExport(opt *PlayerCSVExportOptions) (*PlayerCSVExportResponse, *http.Response, error) {
+func (s *PlayersService) CSVExport(ctx context.Context, opt *PlayerCSVExportOptions) (*PlayerCSVExportResponse, *http.Response, error) {
 	// build the URL with the query string
 	u, err := url.Parse("/players/csv_export")
 	if err != nil {
@@ -315,7 +316,7 @@ func (s *PlayersService) CSVExport(opt *PlayerCSVExportOptions) (*PlayerCSVExpor
 	u.RawQuery = q.Encode()
 
 	// create the request
-	req, err := s.client.NewRequest("POST", u.String(), opt, APP)
+	req, err := s.client.NewRequest(ctx, "POST", u.String(), opt, APP)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -332,7 +333,7 @@ func (s *PlayersService) CSVExport(opt *PlayerCSVExportOptions) (*PlayerCSVExpor
 // Update a player.
 //
 // OneSignal API docs: https://documentation.onesignal.com/docs/playersid-1
-func (s *PlayersService) Update(playerID string, player *PlayerRequest) (*SuccessResponse, *http.Response, error) {
+func (s *PlayersService) Update(ctx context.Context, playerID string, player *PlayerRequest) (*SuccessResponse, *http.Response, error) {
 	// build the URL
 	path := fmt.Sprintf("/players/%s", playerID)
 	u, err := url.Parse(path)
@@ -341,7 +342,7 @@ func (s *PlayersService) Update(playerID string, player *PlayerRequest) (*Succes
 	}
 
 	// create the request
-	req, err := s.client.NewRequest("PUT", u.String(), player, APP)
+	req, err := s.client.NewRequest(ctx, "PUT", u.String(), player, APP)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -358,7 +359,7 @@ func (s *PlayersService) Update(playerID string, player *PlayerRequest) (*Succes
 // Update tags with external user id.
 //
 // OneSignal API docs: https://documentation.onesignal.com/reference/edit-tags-with-external-user-id
-func (s *PlayersService) UpdateTags(appID string, playerID string, tags map[string]string) (*SuccessResponse, *http.Response, error) {
+func (s *PlayersService) UpdateTags(ctx context.Context, appID string, playerID string, tags map[string]string) (*SuccessResponse, *http.Response, error) {
 	// build the URL
 	path := fmt.Sprintf("/apps/%s/users/%s", appID, playerID)
 	u, err := url.Parse(path)
@@ -369,7 +370,7 @@ func (s *PlayersService) UpdateTags(appID string, playerID string, tags map[stri
 	updateRequest := PlayerUpdateTagsRequest{Tags: tags}
 
 	// create the request
-	req, err := s.client.NewRequest("PUT", u.String(), updateRequest, APP)
+	req, err := s.client.NewRequest(ctx, "PUT", u.String(), updateRequest, APP)
 	if err != nil {
 		return nil, nil, err
 	}
