@@ -91,6 +91,7 @@ type NotificationRequest struct {
 	ADMGroup                  string            `json:"adm_group,omitempty"`
 	ADMGroupMessage           interface{}       `json:"adm_group_message,omitempty"`
 	Filters                   interface{}       `json:"filters,omitempty"`
+	ExternalID                string            `json:"external_id,omitempty"`
 }
 
 // NotificationCreateResponse wraps the standard http.Response for the
